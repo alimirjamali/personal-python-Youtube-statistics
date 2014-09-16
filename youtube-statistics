@@ -10,7 +10,7 @@
 import youtube_dl
 from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
 from youtube_dl.utils import PagedList
-my_youtube_dl = youtube_dl.YoutubeDL({'proxy': 'http://localhost:8123'})
+my_youtube_dl = youtube_dl.YoutubeDL()
 my_youtube_dl.add_default_info_extractors()
 
 # These are some of my favorite channels 
