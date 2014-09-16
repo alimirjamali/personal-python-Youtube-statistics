@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+#
+# This custom made Python script calculates total Views, Likes, Dislikes and Duration of uploaded videos ...
+# ... for popular electronic Youtube channel. This script is based on youtube-dl code (Search on github) ...
+# ... most of the code is GPL compliant, please RTFM to learn about approperiate licenses of each piece. ...
+# ... My contribution is released to public domain - Ali Mirjamali - results will be posted on EEVBlog.  !!!
+#
+
+# We need a youtube downloaded object
+import youtube_dl
+from youtube_dl.extractor.common import InfoExtractor, SearchInfoExtractor
+from youtube_dl.utils import PagedList
+my_youtube_dl = youtube_dl.YoutubeDL({'proxy': 'http://localhost:8123'})
+my_youtube_dl.add_default_info_extractors()
+
+# These are some of my favorite channels 
+my_favorite_channels = [
+#	"Afrotechmods",			# Afroman channel
+#	"contextualelectronic",		# Chris Gammel Contextual Electronic channel
+#	"ContourCorsets",		# Fran Blance channel
+	"EEVblog",			# Dave Jones channel
+#	"jeriellsworth",		# Jeri Ellsworth
+#	"mikeselectricstuff",		# Mike Harrison
+	"mjlorton",			# Martin Lorton
+	"sciguy14",			# Jeremy Blum
+	"thebenheckshow",		# Benjamin Heckendorn
+	"TheSignalPathBlog",		# Shahriar Shahramian
+#	"vk2zay",			# Alan Yates
+	"w2aew"]			# Alan Wolke
+
+# Final results will be stored in this:
+my_statistics = []
+
+# Let's check each of my favorite Youtube channels
+for my_channel in my_favorite_channels:
+        try:   
+                my_result = my_youtube_dl.extract_info("http://www.youtube.com/user/"+my_channel
+                        ,download=False
+                        ,process=False)
+        except KeyboardInterrupt:
+                my_youtube_dl.to_screen(u'[info] Ctr+C detected!')
+                sys.exit(0)
+        except:
+                my_youtube_dl.to_screen(u'[info] Ops! Error downloading \"' + my_channel +'\" information')
+                continue
+
+	# Ensure we received a PagedList object
+	assert isinstance (my_result['entries'], PagedList)
+	try:
+		total_views=0
+		total_likes=0
+		total_dislikes=0
+		total_duration=0
+		for my_video in my_result['entries'].getslice():
+			my_video_info=my_youtube_dl.extract_info(my_video['url'],download=False,process=False)
+			print "Title:", my_video_info['title']
+			print "Views:", my_video_info['view_count'],
+			print "- Likes:", my_video_info['like_count'],
+			print "- Dislikes:", my_video_info['dislike_count'],
+			print "- Duration:", my_video_info['duration']
+			total_views = total_views + my_video_info['view_count']
+			# Some of the videos have like/dislike disabled (cheating by uploaded :-P)
+			if my_video_info['like_count'] is not None:
+				total_likes = total_likes + my_video_info['like_count']
+			if my_video_info['dislike_count'] is not None:
+				total_dislikes = total_dislikes + my_video_info['dislike_count']
+			total_duration = total_duration + my_video_info['duration']
+		print "Calculation statistics for ", my_channel
+		print "Total view count:", total_views
+		print "Total like count:", total_likes
+		print "Total dislike count:", total_dislikes
+		print "Total duration:", total_duration
+		my_statistics.append({	'channel': my_channel,
+					'views': total_views,
+					'likes': total_likes,
+					'dislikes': total_dislikes,
+					'duration': total_duration})
+	except KeyboardInterrupt:
+		my_youtube_dl.to_screen(u'[info] Ctr+C detected!')
+		sys.exit(1)
+	except:
+		print "ERROR"
+		continue
+
+print
+for channel in my_statistics:
+	print "The", channel['channel'],"channel has", 
+	print channel['views'],"views,",
+	print channel['likes'],"likes,",
+	print channel['dislikes'],"dislikes and has uploaded",
+	print channel['duration'],"seconds of video footage."
