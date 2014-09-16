@@ -15,17 +15,17 @@ my_youtube_dl.add_default_info_extractors()
 
 # These are some of my favorite channels 
 my_favorite_channels = [
-#	"Afrotechmods",			# Afroman channel
-#	"contextualelectronic",		# Chris Gammel Contextual Electronic channel
-#	"ContourCorsets",		# Fran Blance channel
+	"Afrotechmods",			# Afroman channel
+	"contextualelectronic",		# Chris Gammel Contextual Electronic channel
+	"ContourCorsets",		# Fran Blance channel
 	"EEVblog",			# Dave Jones channel
-#	"jeriellsworth",		# Jeri Ellsworth
-#	"mikeselectricstuff",		# Mike Harrison
+	"jeriellsworth",		# Jeri Ellsworth
+	"mikeselectricstuff",		# Mike Harrison
 	"mjlorton",			# Martin Lorton
 	"sciguy14",			# Jeremy Blum
 	"thebenheckshow",		# Benjamin Heckendorn
 	"TheSignalPathBlog",		# Shahriar Shahramian
-#	"vk2zay",			# Alan Yates
+	"vk2zay",			# Alan Yates
 	"w2aew"]			# Alan Wolke
 
 # Final results will be stored in this:
